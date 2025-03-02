@@ -1,0 +1,9 @@
+# ビズリーチ求職者ページのサンプルURLリスト
+# 実際のURLに置き換えてください
+
+https://www.bizreach.jp/company/candidates/12345
+https://www.bizreach.jp/company/candidates/67890
+https://www.bizreach.jp/company/candidates/54321
+
+# 以下のようにコメントアウトすることも可能です
+# https://www.bizreach.jp/company/candidates/99999
