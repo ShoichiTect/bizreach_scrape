@@ -1,5 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -19,13 +20,15 @@ class BizreachScraper:
         ビズリーチスクレイパーの初期化
         
         Args:
-            chrome_driver_path (str, optional): Chromeドライバーのパス。None の場合は自動検出を試みます。
+            chrome_driver_path (str, optional): Chromeドライバーのパス。None の場合は自動検出・ダウンロードされます。
         """
-        self.service = Service(chrome_driver_path) if chrome_driver_path else None
+        self.chrome_driver_path = chrome_driver_path
         self.options = webdriver.ChromeOptions()
         
-        # ヘッドレスモードは使わない
-        # 必要に応じて他のオプションを追加
+        # ゲストモードの設定
+        self.options.add_argument("--guest")
+        
+        # その他の設定
         self.options.add_argument("--disable-notifications")
         self.options.add_argument("--disable-popup-blocking")
         self.options.add_argument("--disable-extensions")
@@ -36,10 +39,14 @@ class BizreachScraper:
     
     def start_browser(self):
         """ブラウザを起動する"""
-        if self.service:
-            self.driver = webdriver.Chrome(service=self.service, options=self.options)
+        if self.chrome_driver_path:
+            # 指定されたドライバーパスを使用
+            service = Service(self.chrome_driver_path)
+            self.driver = webdriver.Chrome(service=service, options=self.options)
         else:
-            self.driver = webdriver.Chrome(options=self.options)
+            # ChromeDriverManagerを使用して自動検出・ダウンロード
+            service = Service(ChromeDriverManager().install())
+            self.driver = webdriver.Chrome(service=service, options=self.options)
             
         self.wait = WebDriverWait(self.driver, 20)
         self.driver.maximize_window()

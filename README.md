@@ -22,26 +22,16 @@ bizreach_scraper/
 
 - Python 3.8以上
 - Google Chrome
-- ChromeDriver（Chromeと互換性のあるバージョン）
 
 ## セットアップ
 
-1. 依存パッケージのインストール
+依存パッケージのインストール
 
 ```bash
-pip install selenium pandas
+pip install -r requirements.txt
 ```
 
-2. ChromeDriverのインストール
-
-ChromeDriverはご使用のGoogle Chromeのバージョンに合ったものをダウンロードしてください：
-https://sites.google.com/chromium.org/driver/
-
-MacやLinuxの場合は、ChromeDriverに実行権限を付与することを忘れないでください：
-
-```bash
-chmod +x /path/to/chromedriver
-```
+これにより、必要なパッケージ（selenium, pandas, webdriver-manager）がインストールされます。ChromeDriverは自動的にダウンロードされるため、手動でインストールする必要はありません。
 
 ## 使用方法
 
@@ -70,7 +60,7 @@ python src/main.py -u your_username -p your_password -i url_list.txt
 - `-u`, `--username`: ビズリーチのログインユーザー名/メールアドレス（必須）
 - `-p`, `--password`: ビズリーチのログインパスワード（必須）
 - `-i`, `--input`: URLリストファイルのパス（必須）
-- `-d`, `--driver`: ChromeDriverのパス（省略可）
+- `-d`, `--driver`: ChromeDriverのパス（省略可、省略すると自動ダウンロードされます）
 - `-o`, `--output-dir`: 出力ディレクトリ（デフォルト: ./data）
 - `-f`, `--format`: 出力形式 (csv, json, both)（デフォルト: both）
 - `-w`, `--wait`: リクエスト間の待機時間（秒）（デフォルト: 3）

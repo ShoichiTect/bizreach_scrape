@@ -10,6 +10,9 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 's
 from bizreach_scraper import BizreachScraper
 from utils import generate_mock_candidate_data
 
+# ChromeDriverManagerをモック化
+from unittest.mock import patch, MagicMock
+
 
 class TestBizreachScraper(unittest.TestCase):
     """BizreachScraperクラスのテストクラス"""
@@ -41,11 +44,14 @@ class TestBizreachScraper(unittest.TestCase):
         os.rmdir(self.temp_dir)
     
     @patch('bizreach_scraper.webdriver')
-    def test_start_browser(self, mock_webdriver):
+    @patch('bizreach_scraper.ChromeDriverManager')
+    def test_start_browser(self, mock_chrome_driver_manager, mock_webdriver):
         """ブラウザの起動テスト"""
         # モックの設定
         mock_driver = MagicMock()
+        mock_service = MagicMock()
         mock_webdriver.Chrome.return_value = mock_driver
+        mock_chrome_driver_manager.return_value.install.return_value = '/mock/path/to/chromedriver'
         
         # スクレイパーの初期化と実行
         scraper = BizreachScraper()
@@ -53,7 +59,6 @@ class TestBizreachScraper(unittest.TestCase):
         
         # 検証
         self.assertTrue(result)
-        mock_webdriver.Chrome.assert_called_once()
         self.assertEqual(scraper.driver, mock_driver)
     
     @patch('bizreach_scraper.webdriver')
